@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++.exe build active file",
+            "command": "D:\\newMinGW\\mingw64\\bin\\g++.exe",  
+            "args": [
+                "-g",
+                "${file}",
+                "-I'F:/codes/CLRS/Lab/cppheaders'",
+                "-I'D:/boost/boost_1_84_0'",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "D:\\newMinGW\\mingw64\\bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
