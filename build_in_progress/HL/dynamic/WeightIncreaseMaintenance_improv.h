@@ -21,13 +21,58 @@ void SPREAD3(graph_v_of_v_idealID& instance_graph, vector<vector<two_hop_label_v
 	ThreadPool& pool_dynamic, std::vector<std::future<int>>& results_dynamic) {
 
 	/*TO DO 4*/
-	for (auto affected_l : al3)
-	{
-		results_dynamic.emplace_back(pool_dynamic.enqueue([affected_l, L, PPR ]{
-		if (graph_hash_of_mixed_weighted_two_hop_v1_extract_distance_no_reduc(*L, affected_l.first, affected_l.second) <= affected_l.dis)
-		{
 
-			
+	int vex_num=instance_graph.size()/2;
+	double *Dis=new double[vex_num];
+
+	for (auto affected_l : al3)//{u,v,du}
+	{
+		results_dynamic.emplace_back(pool_dynamic.enqueue([affected_l, L, PPR, Dis, vex_num, instance_graph]{
+		pair<weightTYPE,int> dis_vex= graph_hash_of_mixed_weighted_two_hop_v1_extract_distance_no_reduc2(*L, affected_l.first, affected_l.second);
+		if (dis_vex.first <= affected_l.dis)
+		{
+			PPR_insert(*PPR, affected_l.first, dis_vex.second, affected_l.second);
+			PPR_insert(*PPR, affected_l.second, dis_vex.second, affected_l.first);
+		}
+		else
+		{
+			fill_n(Dis, vex_num, -1);
+			Dis[affected_l.first]=affected_l.dis;
+			PLL_dynamic_node_for_sp node={affected_l.first, affected_l.dis};//{vertex, val}
+			boost::heap::fibonacci_heap<PLL_dynamic_node_for_sp> Q;//handle?
+			Q.push(node);
+
+			while (Q.size()>0)
+			{
+				node=Q.top();
+				Q.pop();
+				int x=node.vertex;
+				weightTYPE dx=node.priority_value;
+				(*L)[x][affected_l.second].distance=min((*L)[x][affected_l.second].distance, dx);
+				for (auto xn:instance_graph[affected_l.second])
+				{
+					if (affected_l.second<xn.first)
+					{
+						if (Dis[xn.first]==-1)
+						{
+							Dis[xn.first]=graph_hash_of_mixed_weighted_two_hop_v1_extract_distance_no_reduc(*L, xn.first, affected_l.second);
+						}
+						double newVal=dx+graph_v_of_v_idealID_edge_weight(instance_graph, xn.first, x);
+						if (Dis[xn.first]>newVal)
+						{
+							Dis[xn.first]=newVal;
+							node={xn.first, Dis[xn.first]};
+							Q.push(node);
+						}
+						else
+						{
+							PPR_insert(*PPR, xn.first, dis_vex.second, affected_l.second);
+							PPR_insert(*PPR, affected_l.second, dis_vex.second, xn.first);
+						}
+					}
+				}
+
+			}
 		}
 		
 		return 1;}));
