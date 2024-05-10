@@ -79,7 +79,7 @@ void PLL_thread_function_dij_mixed(int v_k, int N)
 			mtx_595[u].lock();
 			auto L_u_size1 = L_temp_595[u].size(); // a vector<PLL_with_non_adj_reduction_sorted_label>
 			for (int i = 0; i < L_u_size1; i++) {
-				weightTYPE dis = L_temp_595[u][i].distance + T_dij_595[used_id][L_temp_595[u][i].vertex];   // dont know why this code does not work under Windows
+				weightTYPE dis = L_temp_595[u][i].distance + T_dij_595[used_id][L_temp_595[u][i].vertex];
 				if (query_v_k_u > dis) { query_v_k_u = dis; common_hub_for_query_v_k_u = L_temp_595[u][i].vertex; }
 			} //求query的值
 			mtx_595[u].unlock();

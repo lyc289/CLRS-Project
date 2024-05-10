@@ -29,7 +29,7 @@ bool graph_hash_of_mixed_weighted_binary_operations_search(std::vector<std::pair
 
 //返回vector中pair.first=key对应的pair.second(不存在则为DOUBLE_MAX)
 template <typename T>
-T graph_hash_of_mixed_weighted_binary_operations_search_weight(std::vector<std::pair<int, T>>& input_vector, int key) {
+T graph_hash_of_mixed_weighted_binary_operations_search_weight(const std::vector<std::pair<int, T>>& input_vector, int key) {
 
 	/*return std::numeric_limits<T>::max() if key is not in vector; time complexity O(log n)*/
 

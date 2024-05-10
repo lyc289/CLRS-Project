@@ -49,7 +49,7 @@ bool graph_v_of_v_idealID_contain_edge(graph_v_of_v_idealID& g, int e1, int e2) 
 }
 
 //返回e1到e2的边权值
-double graph_v_of_v_idealID_edge_weight(graph_v_of_v_idealID& g, int e1, int e2) {
+double graph_v_of_v_idealID_edge_weight(const graph_v_of_v_idealID& g, int e1, int e2) {
 	/*
 	Return the weight of edge (e1,e2)
 	If the edge does not exist, return std::numeric_limits<double>::max()
