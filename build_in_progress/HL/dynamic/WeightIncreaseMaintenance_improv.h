@@ -12,7 +12,59 @@ void SPREAD1(graph_v_of_v_idealID& instance_graph, vector<vector<two_hop_label_v
 
 void SPREAD2(graph_v_of_v_idealID& instance_graph, vector<vector<two_hop_label_v1>>* L, PPR_type* PPR,
 	std::vector<pair_label>& al2, std::vector<affected_label>* al3, ThreadPool& pool_dynamic, std::vector<std::future<int>>& results_dynamic) {
-
+	std::vector<pair_label>::iterator it;
+	for(it=al2.begin();it!=al2.end();it++)//for each (x,y)属于AL2
+	{
+		std::vector<int> PPR_xyandy = PPR_retrieve(*PPR,it->first,it->second);
+		PPR_xyandy.push_back(it->second);
+		for(std::vector<int>::iterator ilter = PPR_xyandy.begin();ilter!=PPR_xyandy.end();ilter++)
+		{
+			if(instance_graph[*ilter].size()>instance_graph[it->first].size())//r(t)>r(x)
+			{
+				double d1 = 1e12;//inf
+				for(std::vector<std::pair<int, double>>::iterator it2 = instance_graph[it->first].begin();it2!=instance_graph[it->first].end();it2++)
+				{
+					double d1_new =(*L)[it2->first][*ilter].distance+it2->second;
+					if(d1_new<d1)
+					{
+						d1 =d1_new;
+					}
+				}// 计算d1(x,t)
+				pair<weightTYPE, int> hc = Query2(it->first,*ilter);
+				if(hc.first>d1)//不太了解为什么会产生报错，编译的时候看看？
+				{
+					(*al3).push_back(affected_label(it->first,*ilter,d1));
+				}
+				else
+				{
+					PPR_insert(*PPR,it->first,hc.second,*ilter);
+					PPR_insert(*PPR,*ilter,hc.second,it->first);
+				}
+			}
+			else
+			{
+				double d1 = 1e12;
+				for(std::vector<std::pair<int, double>>::iterator it2 = instance_graph[*ilter].begin();it2!=instance_graph[*ilter].end();it2++)
+				{
+					double d1_new =(*L)[it2->first][it->first].distance+it2->second;
+					if(d1_new<d1)
+					{
+						d1 =d1_new;
+					}
+				}
+				pair<weightTYPE, int> hc = Query2(*ilter,it->first);
+				if(hc.first>d1)
+				{
+					(*al3).push_back(affected_label(*ilter,it->first,d1));
+				}
+				else
+				{
+					PPR_insert(*PPR,it->first,hc.second,*ilter);
+					PPR_insert(*PPR,*ilter,hc.second,it->first);
+				}
+			}	
+		}//for each t属于PPR[x,y]并y
+	}//遍历al2
 	/*TO DO 3*/
 
 }
