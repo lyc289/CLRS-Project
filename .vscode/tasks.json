@@ -4,14 +4,17 @@
         {
             "type": "shell",
             "label": "g++.exe build active file",
-            "command": "D:\\newMinGW\\mingw64\\bin\\g++.exe",  
+            //"command": "D:\\newMinGW\\mingw64\\bin\\g++.exe",  
+            "command": "/usr/bin/g++",
             "args": [
                 "-g",
                 "${file}",
-                "-I'F:/codes/CLRS/Lab/cppheaders'",
-                "-I'D:/boost/boost_1_84_0'",
+                //"-I'F:/codes/CLRS/Lab/cppheaders'",
+                //"-I'D:/boost/boost_1_84_0'",
+                "-I/media/liuyichen/Data/boost/boost_1_84_0",
+                "-I/media/liuyichen/code/codes/CLRS/Lab/cppheaders",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "D:\\newMinGW\\mingw64\\bin"
